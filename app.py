@@ -8,9 +8,6 @@ from datetime import datetime
 import os
 import wget
 from video_predict import runVideo
-import pathlib   
-temp = pathlib.PosixPath   
-pathlib.PosixPath = pathlib.WindowsPath
 
 
 # Configurations
