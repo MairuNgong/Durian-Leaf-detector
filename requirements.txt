@@ -2,3 +2,4 @@ streamlit
 torch
 wget
 opencv-python
+ultralytics
