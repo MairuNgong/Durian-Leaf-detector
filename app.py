@@ -1,4 +1,5 @@
 import streamlit as st
+import platform
 import torch
 from PIL import Image
 from io import *
@@ -7,10 +8,13 @@ from datetime import datetime
 import os
 import wget
 from video_predict import runVideo
+import pathlib   
+temp = pathlib.PosixPath   
+pathlib.PosixPath = pathlib.WindowsPath
 
 
 # Configurations
-CFG_MODEL_PATH = "custom.pt"
+CFG_MODEL_PATH = "models/custom.pt"
 CFG_ENABLE_URL_DOWNLOAD = False
 CFG_ENABLE_VIDEO_PREDICTION = True
 if CFG_ENABLE_URL_DOWNLOAD:
@@ -58,7 +62,7 @@ def imageInput(model, src):
         if len(imgpaths) == 0:
             st.write(".")
             st.error(
-                'No images found, Please upload example images in data/example_images', icon="")
+                'No images found, Please upload example images in data/example_images', icon=None)
             return
         imgsel = st.slider('Select random images from example data.',
                            min_value=1, max_value=len(imgpaths), step=1)
@@ -171,10 +175,12 @@ def downloadModel():
 
 @st.cache_resource
 def loadmodel(device):
-    if CFG_ENABLE_URL_DOWNLOAD:
-        CFG_MODEL_PATH = f"models/{url.split('/')[-1:][0]}"
-    model = torch.hub.load('ultralytics/yolov5', 'custom',
-                           path=CFG_MODEL_PATH, force_reload=True, device=device)
+    if platform.system() == "Windows":  # Check for Windows
+        model_path = str(CFG_MODEL_PATH)  # Convert to string for Windows
+    else:
+        model_path = CFG_MODEL_PATH  # Use PosixPath for other systems
+
+    model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path, force_reload=True, device=device)
     return model
 
 
