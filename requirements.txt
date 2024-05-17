@@ -1,5 +1,4 @@
 streamlit
 torch
 wget
-libgl1
 opencv-python
