@@ -1,4 +1,4 @@
 streamlit
 torch
 wget
-cv2
+opencv-python
